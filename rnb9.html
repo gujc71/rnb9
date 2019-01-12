@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>React Navigation Builder</title>
+<link href="dndTree.css" rel="stylesheet" type="text/css">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="dndTree.js"></script>
+<script src="rnb9.js"></script>
+<script>
+  var dndTree;
+  window.onload = function(){
+    dndTree = new DndTree("#tree-container", ev_onChange);
+    dndTree.addNodes ([
+      {
+        "name": "Home",
+        "nodeType": "S",
+      }, {
+        "name": "Detail1",
+        "nodeType": "S",
+      }, {
+        "name": "Detail2",
+        "nodeType": "S",
+      },{  
+          "name": "Tab",
+          "nodeType": "BottomTab",
+          "children": [{
+            "name": "Tab1",
+            "nodeType": "S",
+          },{
+            "name": "Tab2",
+            "nodeType": "S",
+          },{
+            "name": "Tab3",
+            "nodeType": "S",
+          }]
+      }
+    ])
+  }
+  
+  function ev_onChange(node) {
+    var nodeType = node.nodeType;
+
+    var radioObj = document.getElementsByName("nodeType");
+    for(var i = 0; i < radioObj.length; i++) {
+      radioObj[i].checked = radioObj[i].value == nodeType; 
+    }
+	
+    document.getElementById("classname").value = node.name;
+  }
+
+  function addBtnClick() {
+    AddOrUpdateNode(dndTree.addNode);
+  }
+
+  function updateBtnClick() {
+    var nodeType = document.querySelector('input[name="nodeType"]:checked').value;
+    
+    if (dndTree.getActivateNode()==dndTree.getRoot() & nodeType==="S") {
+      alert("root node can not be set to screen!");
+      return;
+    }
+    AddOrUpdateNode(dndTree.updateNode);
+  }
+
+  function AddOrUpdateNode(fn) {
+    var classname = document.getElementById("classname").value;
+    if (!classname) {
+      alert("enter Component Name!");
+      return;
+    }
+    var nodeType = document.querySelector('input[name="nodeType"]:checked').value;
+    fn(classname, nodeType);
+  }
+
+  function deleteBtnClick() {
+    dndTree.deleteNode();
+  }
+
+  function previewBtnClick(){
+    document.getElementById("previewText").value = preview4rnb9();
+  }
+
+</script>
+<body>
+    <h1>React Navigation Builder v0.1</h1>
+    <div>
+      <p>This is a simple tool for easily using React-Navigation.</p>
+      <p>React-Navigation is a library for easy use of React-Native screens, but it is difficult to use.</p>
+      <p>In RNB9 (React Navigation Builder), if you specify the configuration of the Screen, Tag, and Drawer,
+      You can generate code that uses that component.</p>
+      <p>Finally, copy and paste the generated code into React-Native App.js and run it.</p>
+    </div>
+    <div id="tree-container"></div>
+
+  <div style="width: 400px; display:inline-block; vertical-align:top">
+    <ul>
+      <li>Type: <br/>
+      <label><input type='radio' id='nodeType' name='nodeType' value='S' checked/>Screen</label><br/>
+      <label><input type='radio' id='nodeType' name='nodeType' value='BottomTab' />Bottom Tab</label>
+      <label><input type='radio' id='nodeType' name='nodeType' value='MaterialTopTab' />Top Tab</label>
+      <label><input type='radio' id='nodeType' name='nodeType' value='Drawer' />Drawer</label>
+      <label><input type='radio' id='nodeType' name='nodeType' value='Stack' />Stack</label>
+      </li>
+      <li>Component Name: <input id="classname" type="text" /></li>
+    </ul>
+    <p>
+      <button id="addBtn" onclick="addBtnClick()">Add node</button>
+      <button id="btnUpdate" onclick="updateBtnClick()">Update node</button> 
+      <button id="btnDelete" onclick="deleteBtnClick()">Delete node</button>
+      <button id="btnPreview" onclick="previewBtnClick()">Preview</button>
+    </p>
+  </div>
+  <div style="width: 500px; display:inline-block; vertical-align:top">
+    <textarea id="previewText" style="width: 500px; height: 200px"></textarea>
+  </div>
+</body>
+</html>
+
+
+
