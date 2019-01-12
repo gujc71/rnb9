@@ -14,4 +14,4 @@ Finally, copy and paste the generated code into React-Native App.js and run it.
 
 
 ### Demo ###
-[https://gujc71.github.io/rnb9/](https://gujc71.github.io/rnb9/)
+[https://gujc71.github.io/rnb9/rnb9.html](https://gujc71.github.io/rnb9/rnb9.html)
